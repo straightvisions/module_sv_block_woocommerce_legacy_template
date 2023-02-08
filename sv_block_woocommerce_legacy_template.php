@@ -5,9 +5,7 @@
 		public function init() {
 			$this->set_module_title( __( 'Block: WooCommerce Legacy Template', 'sv100' ) )
 				->set_module_desc( __( 'Settings for Gutenberg Block', 'sv100' ) )
-				->register_scripts()
-				->get_root()
-				->add_section( $this );
+				->register_scripts();
 
 			// override templates
 			add_filter( 'wc_get_template', array( $this, 'wc_get_template' ), 10, 5 );
