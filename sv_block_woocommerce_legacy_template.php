@@ -10,6 +10,9 @@
 			// override templates
 			add_filter( 'wc_get_template', array( $this, 'wc_get_template' ), 10, 5 );
 
+            // override template parts
+            add_filter( 'wc_get_template_part', array( $this, 'wc_get_template_part' ), 10, 4 );
+
 			// remove default scripts
 			add_action( 'wp_enqueue_scripts', array( $this, 'remove_woocommerce_styles_scripts' ), 99 );
 
@@ -25,6 +28,14 @@
 				return $located;
 			}
 		}
+        public function wc_get_template_part( $located, $template, $slug ) {
+            if ( is_file( $this->get_path( 'lib/tpl/frontend/' . $template . '-' . $slug . ".php" ) ) ){
+                return $this->get_path( 'lib/tpl/frontend/' . $template . '-' . $slug . ".php" );
+            } else {
+                return $located;
+            }
+        }
+
 		public function register_scripts(): \sv100\sv_block_woocommerce_legacy_template {
 			$this->get_script( 'single' )
 			     ->set_path( 'lib/css/common/single.css' );
