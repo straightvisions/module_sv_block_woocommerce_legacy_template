@@ -13,9 +13,6 @@
             // override template parts
             add_filter( 'wc_get_template_part', array( $this, 'wc_get_template_part' ), 10, 4 );
 
-			// remove default scripts
-			add_action( 'wp_enqueue_scripts', array( $this, 'remove_woocommerce_styles_scripts' ), 99 );
-
 			// add theme support flag
 			add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ) );
 
@@ -47,19 +44,6 @@
 			if ( function_exists( 'is_product' ) && is_product() ) {
 				$this->get_script( 'single' )->set_is_enqueued();
 			}
-
-			return $this;
-		}
-		public function remove_woocommerce_styles_scripts(): \sv100\sv_block_woocommerce_legacy_template {
-			// Dequeue WooCommerce styles
-			wp_dequeue_style( 'woocommerce-layout' );
-			wp_dequeue_style( 'woocommerce-general' );
-			wp_dequeue_style( 'woocommerce-smallscreen' );
-
-			// Dequeue WooCommerce scripts
-			wp_dequeue_script( 'wc-cart-fragments' );
-			wp_dequeue_script( 'woocommerce' );
-			wp_dequeue_script( 'wc-add-to-cart' );
 
 			return $this;
 		}
