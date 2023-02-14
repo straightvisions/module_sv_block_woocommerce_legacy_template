@@ -14,7 +14,10 @@
             add_filter( 'wc_get_template_part', array( $this, 'wc_get_template_part' ), 10, 4 );
 
 			// add theme support flag
-			add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ) );
+			add_action( 'after_setup_theme', array( $this, 'add_theme_support' ) );
+
+			// remove theme support flag
+			add_action( 'wp', array( $this, 'remove_theme_support' ) );
 
 			return $this;
 		}
@@ -35,19 +38,29 @@
 
 		public function register_scripts(): \sv100\sv_block_woocommerce_legacy_template {
 			$this->get_script( 'single' )
-			     ->set_path( 'lib/css/common/single.css' );
+			     ->set_path( 'lib/css/common/common.css' );
 
 			return $this;
 		}
 		public function enqueue_scripts(): \sv100\sv_block_woocommerce_legacy_template {
-			// Product Page
 			if ( function_exists( 'is_product' ) && is_product() ) {
-				$this->get_script( 'single' )->set_is_enqueued();
+				foreach($this->get_scripts() as $script){
+					$script->set_is_enqueued();
+				}
 			}
 
 			return $this;
 		}
-		public function after_setup_theme() {
-			add_theme_support( 'woocommerce' );
+		public function add_theme_support() {
+			add_theme_support( 'woocommerce', array(
+				'thumbnail_image_width' => get_option( 'thumbnail_size_w'),
+				'gallery_thumbnail_image_width' => get_option( 'thumbnail_size_w'),
+				'single_image_width' => get_option( 'medium_size_w'),
+			) );
+		}
+		public function remove_theme_support() {
+			remove_theme_support( 'wc-product-gallery-zoom' );
+			remove_theme_support( 'wc-product-gallery-lightbox' );
+			remove_theme_support( 'wc-product-gallery-slider' );
 		}
 	}
