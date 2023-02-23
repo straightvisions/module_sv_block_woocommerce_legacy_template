@@ -13,6 +13,9 @@
             // override template parts
             add_filter( 'wc_get_template_part', array( $this, 'wc_get_template_part' ), 10, 4 );
 
+			// override comments template
+			add_filter( 'comments_template', array($this, 'comments_template'), 100 );
+
 			// add theme support flag
 			add_action( 'after_setup_theme', array( $this, 'add_theme_support' ) );
 
@@ -21,19 +24,34 @@
 
 			return $this;
 		}
+		public function comments_template($theme_template){
+			if(!function_exists('is_product')){
+				return $theme_template;
+			}
+
+			if(!is_product()){
+				return $theme_template;
+			}
+
+			if ( is_file( $this->get_path( 'lib/tpl/frontend/single-product-reviews.php' ) ) ){
+				return $this->get_path( 'lib/tpl/frontend/single-product-reviews.php' );
+			}
+
+			return $theme_template;
+		}
 		public function wc_get_template( $located, $template_name, $args, $template_path, $default_path ) {
 			if ( is_file( $this->get_path( 'lib/tpl/frontend/' . $template_name ) ) ){
 				return $this->get_path( 'lib/tpl/frontend/' . $template_name );
-			} else {
-				return $located;
 			}
+
+			return $located;
 		}
         public function wc_get_template_part( $located, $template, $slug ) {
             if ( is_file( $this->get_path( 'lib/tpl/frontend/' . $template . '-' . $slug . ".php" ) ) ){
                 return $this->get_path( 'lib/tpl/frontend/' . $template . '-' . $slug . ".php" );
-            } else {
-                return $located;
             }
+
+			return $located;
         }
 
 		public function register_scripts(): \sv100\sv_block_woocommerce_legacy_template {
