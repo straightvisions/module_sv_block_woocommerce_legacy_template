@@ -70,10 +70,11 @@
 			return $this;
 		}
 		public function add_theme_support() {
+			//@todo check if this is still valid
 			add_theme_support( 'woocommerce', array(
-				'thumbnail_image_width'             => intval(get_option( 'thumbnail_size_w')),
-				'gallery_thumbnail_image_width'     => round(intval(get_option( 'thumbnail_size_w')) / 4),
-				'single_image_width'                => intval(get_option( 'medium_size_w')),
+				'thumbnail_image_width'             => intval(get_option( 'thumbnail_size_w', 255)),
+				'gallery_thumbnail_image_width'     => round(intval(get_option( 'thumbnail_size_w', 255)) / 4),
+				'single_image_width'                => intval(get_option( 'medium_size_w', 570)),
 			) );
 		}
 		public function remove_theme_support() {
